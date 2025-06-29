@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ScrapeFlow
 
-## Getting Started
+![ScrapeFlow Logo](https://github.com/user-attachments/assets/032b02d7-0df7-41aa-9a8a-5038b90d01fe)
 
-First, run the development server:
+**ScrapeFlow** is a modern, extensible workflow automation platform designed for browser-based web scraping, data extraction, and automation tasks. Built with **Next.js**, **Prisma**, and **Puppeteer**, it empowers users to visually design, schedule, and execute complex scraping workflows without writing code.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Visual Workflow Editor**: Build scraping workflows with a drag-and-drop interface using modular tasks (nodes) like launching browsers, navigating URLs, extracting data, filling forms, clicking elements, and more.
+- **Task Library**: Includes built-in tasks for:
+  - Browser automation (via Puppeteer)
+  - HTML extraction
+  - AI-powered data extraction
+  - JSON manipulation
+  - Webhook delivery
+- **Execution & Monitoring**: Run workflows manually or on a schedule (cron), track execution status, view logs, and analyze results.
+- **Usage-Based Credits**: Workflow executions consume credits based on tasks used. Purchase credit packs and monitor usage/billing history.
+- **Authentication & Security**: Secure user authentication via **Clerk**, with sensitive data (e.g., credentials) securely stored.
+- **Billing Integration**: Seamless credit purchasing and billing management with **Stripe**.
+- **Extensible**: Easily add new task types or extend existing ones.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Example Use Cases
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Automated web data extraction and reporting
+- Scheduled scraping of competitor prices or product listings
+- Automated form submissions and browser interactions
+- AI-powered data parsing from web pages
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: Next.js, React, Tailwind CSS, Radix UI
+- **Backend**: Next.js API routes, Prisma ORM, SQLite
+- **Automation**: Puppeteer for browser automation
+- **Payments**: Stripe
+- **Authentication**: Clerk
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
