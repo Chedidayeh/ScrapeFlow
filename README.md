@@ -1,7 +1,5 @@
 # ScrapeFlow
 
-![ScrapeFlow Logo](https://github.com/user-attachments/assets/032b02d7-0df7-41aa-9a8a-5038b90d01fe)
-
 **ScrapeFlow** is a modern, extensible workflow automation platform designed for browser-based web scraping, data extraction, and automation tasks. Built with **Next.js**, **Prisma**, and **Puppeteer**, it empowers users to visually design, schedule, and execute complex scraping workflows without writing code.
 
 ## Key Features
