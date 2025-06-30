@@ -187,7 +187,7 @@ async function executeWorkflowPhase(
     const creditsRequired = TaskRegistry[node.data.type].credits;
     console.log(`Executing phase ${phase.name} with ${creditsRequired} credits required`)
 
-    // TODO  : decrement user balance ( with required credits )
+    // decrement user balance ( with required credits )
 
     let success = await decrementCredits(userId, creditsRequired, logCollector)
     const creditsConsumed = success ? creditsRequired : 0
