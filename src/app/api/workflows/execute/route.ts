@@ -15,7 +15,7 @@ function isValidSecret(secret: string) {
         return false
     }
 }
-export async function GET(request: Request) {
+async function handleWorkflowExecution(request: Request) {
     const authHeader = request.headers.get("authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -85,6 +85,12 @@ export async function GET(request: Request) {
     } catch (error) {
         return Response.json({ error: "internal server error" }, { status: 500 });
     }
+}
 
+export async function GET(request: Request) {
+    return handleWorkflowExecution(request);
+}
 
+export async function POST(request: Request) {
+    return handleWorkflowExecution(request);
 }

@@ -1,43 +1,61 @@
 import prisma from "@/lib/db/prisma";
 import { getAppUrl } from "@/lib/helper/appUrl";
 import { WorkflowStatus } from "@/types/workflow";
-import { cache } from "react";
 
 export async function GET(req: Request) {
-    const now = new Date();
-    const workflows = await prisma.workflow.findMany({
-        select: { id: true },
-        where: {
-            status: WorkflowStatus.PUBLISHED,
-            cron: { not: null },
-            nextRunAt: { lte: now },
+    try {
+        const now = new Date();
+        const workflows = await prisma.workflow.findMany({
+            select: { id: true },
+            where: {
+                status: WorkflowStatus.PUBLISHED,
+                cron: { not: null },
+                nextRunAt: { lte: now },
+            },
+        });
 
-        },
-    });
+        console.log("@@WORKFLOW TO RUN", workflows.length);
+        
+        // Trigger workflows in parallel but don't wait for them
+        const triggerPromises = workflows.map(workflow => 
+            triggerWorkflow(workflow.id).catch(err => 
+                console.error("Error triggering workflow", workflow.id, ":", err.message)
+            )
+        );
+        
+        // Don't await the triggers to avoid blocking the response
+        Promise.all(triggerPromises);
 
-    console.log("@@WORKFLOW TO RUN", workflows.length);
-    for (const workflow of workflows) {
-        triggerWorkflow(workflow.id);
+        return new Response(null, { status: 200 });
+    } catch (error) {
+        console.error("Error in cron job:", error);
+        return new Response("Internal Server Error", { status: 500 });
     }
-
-
-
-    return new Response(null, { status: 200 });
-
 }
 
-function triggerWorkflow(workflowId: string) {
-    const triggerApiUrl = getAppUrl(`api/workflows/execute?workflowId=${workflowId}`)
+async function triggerWorkflow(workflowId: string): Promise<void> {
+    try {
+        const triggerApiUrl = getAppUrl(`api/workflows/execute?workflowId=${workflowId}`);
 
-    fetch(triggerApiUrl, {
-        headers: {
-            Authorization: `Bearer ${process.env.API_SECRET!}`
-        },
-        cache: "no-store",
-    }).catch((err) => console.error(
-        "Error triggering workflow with id",
-        workflowId,
-        ":error->",
-        err.message)
-    )
+        const response = await fetch(triggerApiUrl, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${process.env.API_SECRET!}`,
+                'Content-Type': 'application/json',
+            },
+            cache: "no-store",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (err) {
+        console.error(
+            "Error triggering workflow with id",
+            workflowId,
+            ":error->",
+            err instanceof Error ? err.message : 'Unknown error'
+        );
+        throw err; // Re-throw to be caught by the caller
+    }
 }
