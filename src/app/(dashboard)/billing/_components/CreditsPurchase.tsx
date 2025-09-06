@@ -4,19 +4,24 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CreditsPack, PackId } from '@/types/billing'
-import { CoinsIcon, CreditCard } from 'lucide-react'
+import { CoinsIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { PurchaseCredits } from '@/actions/billing/actions'
+import { AddCredits } from '@/actions/billing/actions'
 import { toast } from 'sonner'
 
 export default function CreditsPurchase() {
     const [selectedPack, setSelectedPack] = useState(PackId.MEDIUM);
     
     const mutation = useMutation({
-        mutationFn: PurchaseCredits,
+        mutationFn: AddCredits,
+        onSuccess: () => {
+            toast.success('Credits added successfully!');
+            // Optionally refresh the page or update credits display
+            window.location.reload();
+        },
         onError: (error) => {
-            toast.error('Failed to start purchase');
+            toast.error('Failed to add credits');
         }
     });
 
@@ -60,11 +65,11 @@ export default function CreditsPurchase() {
                 <Button
                     disabled={mutation.isPending}
                     onClick={() => {
-                        toast.loading('Redirecting to payment...', { id: 'purchase-credits' });
+                        toast.loading('Adding credits...', { id: 'add-credits' });
                         mutation.mutate(selectedPack);
                     }}
                 >
-                    <CreditCard className='mr-2 h-5 w-5' /> Purchase credits
+                    <CoinsIcon className='mr-2 h-5 w-5' /> Add Credits
                 </Button>
             </CardFooter>
         </Card>

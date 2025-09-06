@@ -8,7 +8,6 @@ import CreditsPurchase from "./_components/CreditsPurchase";
 import { Period } from "@/types/analytics";
 import { GetCreditUsageInPeriod } from "@/actions/analytics/actions";
 import CreditUsageChart from "./_components/CreditUsageChart";
-import InvoiceBtn from "./_components/InvoiceBtn";
 
 export default function BillingPage() {
     return (
@@ -114,7 +113,6 @@ async function TransactionHistoryCard() {
                             <p className="text-sm text-muted-foreground">
                                 {purchase.description}
                             </p>
-                            <InvoiceBtn id={purchase.id} />
                         </div>
 
                         <div className="text-right ">
