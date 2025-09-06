@@ -212,26 +212,35 @@ export async function WaitForElementExecutor(
             return false
         }
 
+        const timeoutInput = 60
+        const timeoutMs = timeoutInput ? timeoutInput * 1000 : 30000
 
+        environment.log.info(`Waiting for element ${selector} to become ${visibility} (timeout: ${timeoutMs}ms)`)
 
+        // Check if element exists in DOM first (for debugging)
+        const elementExists = await environment.getPage()!.$(selector);
+        if (!elementExists && visibility === "visible") {
+            environment.log.error(`Element ${selector} not found in DOM. This might indicate an incorrect selector or the element hasn't loaded yet.`)
+        }
 
         await environment.getPage()!.waitForSelector(selector, {
             visible: visibility === "visible",
             hidden: visibility === "hidden",
+            timeout: timeoutMs,
         });
 
         environment.log.info(`Element ${selector} became: ${visibility}`)
 
-
         return true;
 
     } catch (error: any) {
-        environment.log.error(error.message)
+        if (error.message.includes("Waiting failed")) {
+            environment.log.error(`Timeout waiting for element ${environment.getInput("Selector")} to become ${environment.getInput("Visibility")}. Element may not exist or took too long to appear.`)
+        } else {
+            environment.log.error(error.message)
+        }
         return false
-
     }
-
-
 }
 
 export async function DeliverViaWebhookExecutor(
