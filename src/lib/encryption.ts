@@ -1,5 +1,3 @@
-import "server-only"
-
 import crypto from "crypto";
 const ALG = "aes-256-cbc"; // key length is 32 bytes
 // openssl rand -hex 32

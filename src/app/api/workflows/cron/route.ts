@@ -35,12 +35,17 @@ export async function GET(req: Request) {
 
 async function triggerWorkflow(workflowId: string): Promise<void> {
     try {
+        const apiSecret = process.env.API_SECRET;
+        if (!apiSecret) {
+            throw new Error("API_SECRET environment variable is not set");
+        }
+
         const triggerApiUrl = getAppUrl(`api/workflows/execute?workflowId=${workflowId}`);
 
         const response = await fetch(triggerApiUrl, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${process.env.API_SECRET!}`,
+                Authorization: `Bearer ${apiSecret}`,
                 'Content-Type': 'application/json',
             },
             cache: "no-store",
